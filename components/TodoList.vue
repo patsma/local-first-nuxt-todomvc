@@ -1,31 +1,32 @@
-<script setup lang="ts">
-import { useDatabase } from '~/composables/useDatabase'
-import type { RxTodoDocument } from '~/types'
+<script setup>
+import { useDatabase } from "~/composables/useDatabase";
 
-// Use your database here
-const database = await useDatabase()
+const database = await useDatabase();
 
-const props = defineProps<{
-  todoList: any[]
-}>()
+const props = defineProps({
+  todoList: {
+    type: Array,
+    required: true,
+  },
+});
 
-const filter = ref('all')
+const filter = ref("all");
 
 const displayedTodoList = computed(() => {
-  return props.todoList.filter(todo => {
-    if (filter.value === 'all') return true
-    if (filter.value === 'active') return todo.state !== 'done'
-    if (filter.value === 'completed') return todo.state === 'done'
-    return false
-  })
-})
+  return props.todoList.filter((todo) => {
+    if (filter.value === "all") return true;
+    if (filter.value === "active") return todo.state !== "done";
+    if (filter.value === "completed") return todo.state === "done";
+    return false;
+  });
+});
 
 const remainingItems = computed(() => {
-  return displayedTodoList.value.filter(todo => todo.state !== 'done').length
-})
+  return displayedTodoList.value.filter((todo) => todo.state !== "done").length;
+});
 
 function clearCompleted() {
-  database.todos.find({ selector: { state: 'done' } }).remove()
+  database.todos.find({ selector: { state: "done" } }).remove();
 }
 </script>
 

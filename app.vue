@@ -1,39 +1,37 @@
-<script setup lang="ts">
-import { useDatabase } from '~/composables/useDatabase'
-import type { RxDocument } from 'rxdb/plugins/core'
-import type { TodoDocType } from '~/types'
-import { ref, watch } from 'vue'
+<script setup>
+import { useDatabase } from "~/composables/useDatabase";
+import { ref, watch } from "vue";
 
 // State management
-const todoList = ref<RxDocument<TodoDocType, {}>[]>([])
-const username = ref(localStorage.getItem('username') || '')
+const todoList = ref([]);
+const username = ref(localStorage.getItem("username") || "");
 
 // Use your database here
-const database = await useDatabase()
+const database = await useDatabase();
 
-// Subscribe to database changes with proper typing
+// Subscribe to database changes
 database.todos
   .find({
-    sort: [{ state: 'desc' }, { lastChange: 'desc' }]
+    sort: [{ state: "desc" }, { lastChange: "desc" }],
   })
   .exec()
-  .then(todos => {
-    todoList.value = todos
-  })
+  .then((todos) => {
+    todoList.value = todos;
+  });
 
 // Ask for username if not set
 if (!username.value) {
-  const input = prompt('Enter your nickname:')
+  const input = prompt("Enter your nickname:");
   if (input) {
-    username.value = input.trim() || 'Anonymous'
-    localStorage.setItem('username', username.value)
+    username.value = input.trim() || "Anonymous";
+    localStorage.setItem("username", username.value);
   }
 }
 
 // Watch for username changes
-watch(username, newName => {
-  localStorage.setItem('username', newName)
-})
+watch(username, (newName) => {
+  localStorage.setItem("username", newName);
+});
 </script>
 
 <template>
@@ -55,13 +53,11 @@ watch(username, newName => {
         </li>
       </ul>
     </section>
-
   </section>
-
 </template>
 
 <style>
-@import 'todomvc-app-css/index.css';
+@import "todomvc-app-css/index.css";
 
 .todoapp h1 {
   top: -80px;
