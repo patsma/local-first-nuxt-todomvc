@@ -33,7 +33,6 @@ export default defineNuxtConfig({
 
   ui: {
     global: true,
-    icons: ['heroicons'],
   },
 
   app: {
